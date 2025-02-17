@@ -1,0 +1,251 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* body{
+  background: #0f1b21;
+} */
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #0f1b21;
+
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes gradient {
+  0% {
+    background-color: #2a7464;
+    background-image: linear-gradient(90deg, #194d44, #168791);
+  }
+  50% {
+    background-color: #51678f;
+    background-image: linear-gradient(90deg, #587dc1, #62dad2);
+  }
+  100% {
+    background-color: #206d8b;
+    background-image: linear-gradient(90deg, #2d6096, #2d9cc7);
+  }
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0; 
+  animation: gradient 10s ease infinite;
+}
+
+/* Navabr */
+.return_home{
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 40px;
+  background-color: #1f3540;
+  border-radius: 17px;
+  color: aqua;
+  cursor: pointer;
+  z-index: 10;
+}
+/* Navbar */
+
+.m_heading{
+  color: white;
+}
+
+.container{
+  text-align: center;
+ 
+}
+.title{
+  margin-top: 50px;
+  color: white;
+  font-size: 60px;
+  position: relative;
+  right: 50px;
+  margin: auto;
+}
+
+.reset{
+  width: 70px;
+  height: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50px;
+  background: #1f3540;
+  font-size: 16px;
+  color: aqua;
+  position: relative;
+  right: 30px;
+
+}
+
+.reset:hover{
+  background: #2b4a59;
+}
+
+.boxes{
+  display: flex;
+  height: 150px;
+  width: 150px;
+  background: #1f3540;
+  border: 4px solid #0f1b21;
+  border-radius:12px ;
+  cursor: pointer;
+}
+
+.board{
+  height: auto;
+  width: 520px;
+  display: flex;
+  margin: auto;
+}
+
+.values{
+  position: relative;
+  left: 45px;
+  top: 18px;
+  font-size: 70px;
+  font-weight: 700;
+  color: rgb(189, 27, 130);
+}
+
+.status{
+  font-size: 30px;
+  color: white;
+  position: relative;
+  left: -45px;
+}
+
+/* home */
+
+
+.outer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 50px;
+  margin:100px auto;
+  width: 70%;
+  height:auto;
+}
+
+
+
+.outer h1{
+  font-size: 60px;
+  font-weight: 700;
+}
+
+.X{
+  color: aqua;
+}
+.O{
+  color: rgb(202, 202, 15);
+}
+
+
+
+.input_field{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 400px;
+  height: auto;
+}
+
+input{
+  width: 100%;
+  padding: 10px;
+  background-color: #2b4957;
+  border-radius: 7px;
+  outline: none;
+}
+
+.button{
+  border: none;
+  outline: none;
+  background-color: rgb(163, 112, 11);
+  width: 400px;
+  color: black;
+  font-size: medium;
+  font-weight: 500;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 7px;
+}
+
+.button:hover{
+  background-color:rgb(184, 127, 12) ;
+}
+
+.p1win,.p2win,.cwin{
+  width: 150px;
+  height: 40px;
+  border: none;
+  outline: none;
+  border-radius: 50px;
+  background: #1f3540;
+  font-size: 16px;
+  color: aqua;
+  position: relative;
+  margin: 10px;
+  right: 30px;
+  cursor:default;
+}
+
+.Pagain{
+  width: 150px;
+  height: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50px;
+  background: #1f3540;
+  font-size: 16px;
+  color: aqua;
+  position: relative;
+  margin: 10px;
+  right: 30px;
+}
+.Pagainc{
+  width: 100px;
+  height: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 50px;
+  background: #1f3540;
+  font-size: 16px;
+  color: aqua;
+  position: relative;
+  margin: 10px;
+  right: 30px;
+}
+.Pagain:hover,.Pagainc:hover{
+  background: #2b4a59;
+}
+
+
