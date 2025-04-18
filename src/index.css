@@ -10,7 +10,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-x: hidden;
+  overflow: hidden;
   background: #0f1b21;
   font-family: Arial, sans-serif;
 }
@@ -21,10 +21,10 @@ body {
   z-index: 1;
   width: 100%;
   max-width: 600px;
-  padding: 1rem;
   margin: 0 auto;
   text-align: center;
   box-sizing: border-box;
+
 }
 
 
@@ -63,7 +63,6 @@ body {
   font-size: clamp(2rem, 8vw, 3.75rem);
   text-align: center;
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 /* Game board */
