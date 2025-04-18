@@ -1,13 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-const Navbar = () => {
-  return (
-    
-    <div className='return_home'>
-        <Link to='/'>Home</Link>
-    </div>
-    
-  )
-}
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default Navbar
+const Navbar = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
+
+  return (
+    <div className="return_home" onClick={handleClick}>
+      Home
+    </div>
+  );
+};
+
+export default Navbar;

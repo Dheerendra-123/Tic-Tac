@@ -1,25 +1,27 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="outer">
-        <h1 className='m_heading'>Tic Tac Toe Game</h1>
-        <h1> <span className='X'>X</span> <span className='O'>O</span></h1>
-        <Link to='/'></Link>
-        <Link to="/computer">
-        <div className="button">Play With Computer</div>
-      </Link>
-      <Link to="/player-select">
-        <div className="button">Play With Human</div>
-      </Link>
-
+      <div className='head_container'>
+        <h1 className='m_heading'>Tic Tac Toe</h1>
+      </div>
+      <h1>
+        <span className='X'>X</span> <span className='O'>O</span>
+      </h1>
+      
+      <div className="button" onClick={() => navigate('/computer')}>
+        Play With Computer
+      </div>
+      
+      <div className="button" onClick={() => navigate('/player-select')}>
+        Play With Human
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
-
-
-
-
+export default Home;

@@ -1,29 +1,44 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const PlayerSelect = () => {
-    const [player1,setPlayer1]=useState('');
-    const [player2,setPlayer2]=useState('');
-  return (
-    <div className="outer">
-        <h1> <span className='X'>X</span> <span className='O'>O</span></h1>
-        
-        <div className='input_field'>
-            <div>
-                <input type="text" placeholder='Enter Player 1 Name' value={player1} onChange={(e)=>setPlayer1(e.target.value)}/>   
-            </div>
-            <div>
-                <input type="text" placeholder='Enter Player 2 Name' value={player2} onChange={(e)=>setPlayer2(e.target.value)}/>
-            </div>
-        </div>
-        <Link to={`/tictactoe?player1=${encodeURIComponent(player1)}&player2=${encodeURIComponent(player2)}`}>
-                <div className="button">
-                    Start Game        
-                </div>
-            </Link> 
-    </div>
-  )
-}
+  const [player1, setPlayer1] = useState('');
+  const [player2, setPlayer2] = useState('');
+  const navigate = useNavigate();
 
-export default PlayerSelect
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const p1 = player1.trim() || 'Player 1';
+    const p2 = player2.trim() || 'Player 2';
+    navigate(`/play?player1=${p1}&player2=${p2}`);
+  };
+
+  return (
+    <>
+      <Navbar />
+      <div className="outer">
+        <h1 className="m_heading">Enter Players</h1>
+        <form onSubmit={handleSubmit} className="input_field">
+          <input
+            type="text"
+            placeholder="Player 1 Name"
+            value={player1}
+            onChange={(e) => setPlayer1(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Player 2 Name"
+            value={player2}
+            onChange={(e) => setPlayer2(e.target.value)}
+          />
+          <button type="submit" className="button">
+            Start Game
+          </button>
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default PlayerSelect;
