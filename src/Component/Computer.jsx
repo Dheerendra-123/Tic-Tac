@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useSound from 'use-sound'; // Import the useSound hook
 import Square from './Square';
 import Navbar from './Navbar';
 
@@ -8,6 +9,12 @@ const Computer = () => {
   const [playerWins, setPlayerWins] = useState(0);
   const [computerWins, setComputerWins] = useState(0);
   const [draws, setDraws] = useState(0);
+  
+  // Add sound hooks
+  const [playXSound] = useSound('/sounds/x.mp3', { volume: 0.5 });
+  const [playOSound] = useSound('/sounds/o.mp3', { volume: 0.5 });
+  const [playWinSound] = useSound('/sounds/win.mp3', { volume: 0.7 });
+  const [playDrawSound] = useSound('/sounds/draw.mp3', { volume: 0.6 });
 
   const handleClick = (index) => {
     if (state[index] || calculateWinner(state) || isDraw(state)) {
@@ -16,11 +23,16 @@ const Computer = () => {
 
     const newState = state.slice();
     newState[index] = 'X';
+    
+    // Play sound for player's move
+    playXSound();
+    
     setState(newState);
     setIsXNext(false); // Switch to computer's turn
   };
 
   const calculateWinner = (squares) => {
+    // Your existing calculateWinner logic
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -40,6 +52,7 @@ const Computer = () => {
     return null;
   };
 
+  // Your existing findBestMove and findWinningMove functions
   const findBestMove = (squares) => {
     // If computer can win in one move, take that move
     const winningMove = findWinningMove(squares, 'O');
@@ -97,6 +110,10 @@ const Computer = () => {
     
     if (bestMove !== -1) {
       newState[bestMove] = 'O';
+      
+      // Play sound for computer's move
+      playOSound();
+      
       setState(newState);
     }
     
@@ -106,12 +123,17 @@ const Computer = () => {
   useEffect(() => {
     // Check if game just ended and update scores
     const winner = calculateWinner(state);
+    const draw = isDraw(state);
+    
     if (winner === 'Player') {
       setPlayerWins(prev => prev + 1);
+      playWinSound(); // Play winning sound
     } else if (winner === 'Computer') {
       setComputerWins(prev => prev + 1);
-    } else if (isDraw(state)) {
+      playWinSound(); // Play winning sound
+    } else if (draw) {
       setDraws(prev => prev + 1);
+      playDrawSound(); // Play draw sound
     }
     
     // Make computer move
@@ -173,10 +195,9 @@ const Computer = () => {
         </div>
         
         <div className="game-controls">
-        <button className='Pagainc' onClick={playAgain}>
+          <button className='Pagainc' onClick={playAgain}>
             Play Again
           </button>
-         
           
           <button className='p1win'>
             Player: {playerWins}
@@ -193,7 +214,6 @@ const Computer = () => {
           <button className="reset" onClick={resetGame}>
             Reset
           </button>
-          
         </div>
       </div>
     </>

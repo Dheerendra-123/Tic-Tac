@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useSound from 'use-sound'; // Import the useSound hook
 import Square from './Square';
 import Navbar from './Navbar';
 import { useLocation } from 'react-router-dom';
@@ -12,6 +13,12 @@ const TicTacToe = () => {
   const player1 = queryParams.get('player1') || 'Player 1';
   const player2 = queryParams.get('player2') || 'Player 2';
   const [winCount, setWinCount] = useState({ player1: 0, player2: 0, draws: 0 });
+  
+  // Add sound hooks
+  const [playXSound] = useSound('/sounds/x.mp3', { volume: 0.5 });
+  const [playOSound] = useSound('/sounds/o.mp3', { volume: 0.5 });
+  const [playWinSound] = useSound('/sounds/win.mp3', { volume: 0.7 });
+  const [playDrawSound] = useSound('/sounds/draw.mp3', { volume: 0.6 });
 
   const handleClick = (index) => {
     if (state[index] || calculateWinner(state) || isDraw(state)) {
@@ -20,13 +27,25 @@ const TicTacToe = () => {
     
     const newState = state.slice();
     newState[index] = isXNext ? 'X' : 'O';
+    
+    // Play the appropriate move sound
+    if (isXNext) {
+      playXSound();
+    } else {
+      playOSound();
+    }
+    
     setState(newState);
     setIsXNext(!isXNext);
     
     const winner = calculateWinner(newState);
     if (winner) {
+      // Play winning sound
+      playWinSound();
       updateWinCount(winner);
     } else if (isDraw(newState)) {
+      // Play draw sound
+      playDrawSound();
       updateDrawCount();
     }
   };
