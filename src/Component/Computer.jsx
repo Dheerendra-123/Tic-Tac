@@ -7,6 +7,7 @@ const Computer = () => {
   const [isXNext, setIsXNext] = useState(true);
   const [playerWins, setPlayerWins] = useState(0);
   const [computerWins, setComputerWins] = useState(0);
+  const [draws, setDraws] = useState(0);
 
   const handleClick = (index) => {
     if (state[index] || calculateWinner(state) || isDraw(state)) {
@@ -109,6 +110,8 @@ const Computer = () => {
       setPlayerWins(prev => prev + 1);
     } else if (winner === 'Computer') {
       setComputerWins(prev => prev + 1);
+    } else if (isDraw(state)) {
+      setDraws(prev => prev + 1);
     }
     
     // Make computer move
@@ -129,6 +132,7 @@ const Computer = () => {
     setIsXNext(true);
     setPlayerWins(0);
     setComputerWins(0);
+    setDraws(0);
   };
 
   const playAgain = () => {
@@ -169,9 +173,10 @@ const Computer = () => {
         </div>
         
         <div className="game-controls">
-          <button className="reset" onClick={resetGame}>
-            Reset
+        <button className='Pagainc' onClick={playAgain}>
+            Play Again
           </button>
+         
           
           <button className='p1win'>
             Player: {playerWins}
@@ -181,9 +186,14 @@ const Computer = () => {
             Computer: {computerWins}
           </button>
           
-          <button className='Pagainc' onClick={playAgain}>
-            Play Again
+          <button className='draw'>
+            Draws: {draws}
           </button>
+          
+          <button className="reset" onClick={resetGame}>
+            Reset
+          </button>
+          
         </div>
       </div>
     </>

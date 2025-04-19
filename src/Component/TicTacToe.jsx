@@ -7,11 +7,11 @@ const TicTacToe = () => {
   const [state, setState] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const location = useLocation();
-  
+    
   const queryParams = new URLSearchParams(location.search);
   const player1 = queryParams.get('player1') || 'Player 1';
   const player2 = queryParams.get('player2') || 'Player 2';
-  const [winCount, setWinCount] = useState({ player1: 0, player2: 0 });
+  const [winCount, setWinCount] = useState({ player1: 0, player2: 0, draws: 0 });
 
   const handleClick = (index) => {
     if (state[index] || calculateWinner(state) || isDraw(state)) {
@@ -26,6 +26,8 @@ const TicTacToe = () => {
     const winner = calculateWinner(newState);
     if (winner) {
       updateWinCount(winner);
+    } else if (isDraw(newState)) {
+      updateDrawCount();
     }
   };
 
@@ -54,7 +56,7 @@ const TicTacToe = () => {
   };
 
   const isDraw = (squares) => {
-    return squares.every((square) => square !== null);
+    return squares.every((square) => square !== null) && !calculateWinner(squares);
   };
 
   const updateWinCount = (winner) => {
@@ -64,10 +66,17 @@ const TicTacToe = () => {
     }));
   };
 
+  const updateDrawCount = () => {
+    setWinCount((prevCount) => ({
+      ...prevCount,
+      draws: prevCount.draws + 1
+    }));
+  };
+
   const resetGame = () => {
     setState(Array(9).fill(null));
     setIsXNext(true);
-    setWinCount({ player1: 0, player2: 0 });
+    setWinCount({ player1: 0, player2: 0, draws: 0 });
   };
 
   const playAgain = () => {
@@ -76,10 +85,10 @@ const TicTacToe = () => {
   };
 
   const winner = calculateWinner(state);
-  const status = winner 
-    ? `Winner is ${winner}` 
-    : isDraw(state) 
-      ? 'It\'s a draw!' 
+  const status = winner
+    ? `Winner is ${winner}`
+    : isDraw(state)
+      ? 'It\'s a draw!'
       : `${isXNext ? player1 : player2}'s Turn`;
 
   return (
@@ -108,8 +117,8 @@ const TicTacToe = () => {
         </div>
         
         <div className="game-controls">
-          <button className="reset" onClick={resetGame}>
-            Reset
+          <button className='Pagain' onClick={playAgain}>
+            Play Again
           </button>
           
           <button className='p1win'>
@@ -119,9 +128,13 @@ const TicTacToe = () => {
           <button className='p2win'>
             {player2}: {winCount.player2}
           </button>
+
+          <button className='draw'>
+            Draws: {winCount.draws}
+          </button>
           
-          <button className='Pagain' onClick={playAgain}>
-            Play Again
+          <button className="reset" onClick={resetGame}>
+            Reset
           </button>
         </div>
       </div>

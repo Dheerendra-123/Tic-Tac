@@ -24,10 +24,8 @@ body {
   margin: 0 auto;
   text-align: center;
   box-sizing: border-box;
-
+  padding: 0 15px;
 }
-
-
 
 /* Navbar */
 .return_home {
@@ -139,72 +137,65 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.reset {
-  width: 70px;
+/* Unified button styles for better consistency */
+.reset, .p1win, .p2win, .cwin, .Pagain, .Pagainc, .draw {
   height: 40px;
   border: none;
   outline: none;
-  cursor: pointer;
   border-radius: 50px;
   background: #1f3540;
   font-size: 16px;
   color: aqua;
-  margin: 10px;
+  margin: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
 }
 
-.reset:hover {
+/* Interactive buttons */
+.reset, .Pagain, .Pagainc, .draw {
+  cursor: pointer;
+}
+
+.reset:hover, .Pagain:hover, .Pagainc:hover, .draw:hover {
   background: #2b4a59;
 }
 
+/* Non-interactive buttons (counters) */
 .p1win, .p2win, .cwin {
-  width: 150px;
-  height: 40px;
-  border: none;
-  outline: none;
-  border-radius: 50px;
-  background: #1f3540;
-  font-size: 16px;
-  color: aqua;
-  margin: 10px;
   cursor: default;
 }
 
+/* Button sizes - more consistent and responsive */
 .Pagain {
-  width: 150px;
-  height: 40px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  border-radius: 50px;
-  background: #1f3540;
-  font-size: 16px;
-  color: aqua;
-  margin: 10px;
+  width: 120px;
 }
 
 .Pagainc {
+  width: 120px;
+}
+
+.reset {
+  width: 80px;
+}
+
+.p1win, .p2win, .cwin {
+  width: 120px;
+}
+
+.draw {
   width: 100px;
-  height: 40px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  border-radius: 50px;
-  background: #1f3540;
-  font-size: 16px;
-  color: aqua;
-  margin: 10px;
 }
 
-.Pagain:hover, .Pagainc:hover {
-  background: #2b4a59;
-}
-
-/* Game control buttons container */
+/* Game control buttons container - improved layout */
 .game-controls {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 10px;
+  align-items: center;
+  margin: 20px auto 0;
+  max-width: 500px;
 }
 
 /* Home page styles */
@@ -297,8 +288,23 @@ input {
   }
   
   .game-controls {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
     align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+  }
+  
+  /* Adjust button widths for the grid layout */
+  .Pagain, .reset, .p1win, .p2win, .cwin, .Pagainc, .draw {
+    width: 100%;
+    margin: 5px;
+  }
+  
+  /* Make the reset button take the full width in mobile view */
+  .reset {
+    grid-column: span 2;
   }
   
   .boxes {
@@ -308,11 +314,6 @@ input {
   
   .button {
     max-width: 280px;
-  }
-  
-  .p1win, .p2win, .cwin {
-    width: 130px;
-    font-size: 14px;
   }
 }
 
@@ -350,8 +351,17 @@ input {
     margin-top: 40px;
   }
   
-  .reset, .p1win, .p2win, .cwin, .Pagain, .Pagainc {
+  .reset, .p1win, .p2win, .cwin, .Pagain, .Pagainc, .draw {
     height: 35px;
     font-size: 14px;
+  }
+  
+  /* Make game controls stack nicely on very small screens */
+  .game-controls {
+    grid-template-columns: 1fr;
+  }
+  
+  .reset {
+    grid-column: span 1;
   }
 }
