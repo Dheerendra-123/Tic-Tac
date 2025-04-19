@@ -51,12 +51,11 @@ body {
   color: white;
   text-align: center;
   width: 100%;
-  margin: 0 0 1rem;
   font-size: clamp(2rem, 8vw, 3.75rem);
 }
 
 .title {
-  margin-top: 50px;
+  margin-top: 10px;
   color: white;
   font-size: clamp(2rem, 8vw, 3.75rem);
   text-align: center;
@@ -194,7 +193,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin: 20px auto 0;
+  margin: 5px auto 0;
   max-width: 500px;
 }
 
