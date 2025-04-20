@@ -9,6 +9,8 @@ const Computer = () => {
   const [playerWins, setPlayerWins] = useState(0);
   const [computerWins, setComputerWins] = useState(0);
   const [draws, setDraws] = useState(0);
+  const [playerSymbol, setPlayerSymbol] = useState('X');
+  const [computerSymbol, setComputerSymbol] = useState('O');
   
   // Add sound hooks
   const [playXSound] = useSound('/sounds/x.mp3', { volume: 0.5 });
@@ -22,17 +24,20 @@ const Computer = () => {
     }
 
     const newState = state.slice();
-    newState[index] = 'X';
+    newState[index] = playerSymbol;
     
-    // Play sound for player's move
-    playXSound();
+    // Play sound based on symbol
+    if (playerSymbol === 'X') {
+      playXSound();
+    } else {
+      playOSound();
+    }
     
     setState(newState);
     setIsXNext(false); // Switch to computer's turn
   };
 
   const calculateWinner = (squares) => {
-    // Your existing calculateWinner logic
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -46,39 +51,88 @@ const Computer = () => {
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a] === 'X' ? 'Player' : 'Computer';
+        return squares[a] === playerSymbol ? 'Player' : 'Computer';
       }
     }
     return null;
   };
 
-  // Your existing findBestMove and findWinningMove functions
+  const isDraw = (squares) => {
+    return squares.every((square) => square !== null);
+  };
+
+  // Score function for minimax algorithm
+  const evaluate = (squares) => {
+    const winner = calculateWinner(squares);
+    if (winner === 'Computer') return 10;
+    if (winner === 'Player') return -10;
+    return 0;
+  };
+
+  // Alpha-Beta pruning implementation
+  const minimax = (squares, depth, isMaximizing, alpha, beta) => {
+    const winner = calculateWinner(squares);
+    
+    // Terminal states
+    if (winner === 'Computer') return 10 - depth;
+    if (winner === 'Player') return depth - 10;
+    if (isDraw(squares)) return 0;
+    
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < squares.length; i++) {
+        if (squares[i] === null) {
+          squares[i] = computerSymbol;
+          const score = minimax(squares, depth + 1, false, alpha, beta);
+          squares[i] = null;
+          bestScore = Math.max(score, bestScore);
+          alpha = Math.max(alpha, bestScore);
+          if (beta <= alpha) break; // Alpha-Beta pruning
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < squares.length; i++) {
+        if (squares[i] === null) {
+          squares[i] = playerSymbol;
+          const score = minimax(squares, depth + 1, true, alpha, beta);
+          squares[i] = null;
+          bestScore = Math.min(score, bestScore);
+          beta = Math.min(beta, bestScore);
+          if (beta <= alpha) break; // Alpha-Beta pruning
+        }
+      }
+      return bestScore;
+    }
+  };
+
   const findBestMove = (squares) => {
-    // If computer can win in one move, take that move
-    const winningMove = findWinningMove(squares, 'O');
+    let bestScore = -Infinity;
+    let bestMove = -1;
+    
+    // First check if there's a winning move or blocking move
+    const winningMove = findWinningMove(squares, computerSymbol);
     if (winningMove !== -1) return winningMove;
-
-    // If player can win in one move, block that move
-    const blockingMove = findWinningMove(squares, 'X');
+    
+    const blockingMove = findWinningMove(squares, playerSymbol);
     if (blockingMove !== -1) return blockingMove;
-
-    // Take center if available
-    if (squares[4] === null) return 4;
-
-    // Take corners if available
-    const availableCorners = [0, 2, 6, 8].filter(corner => squares[corner] === null);
-    if (availableCorners.length > 0) {
-      return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+    
+    // Apply alpha-beta pruning for deeper analysis
+    for (let i = 0; i < squares.length; i++) {
+      if (squares[i] === null) {
+        squares[i] = computerSymbol;
+        const score = minimax(squares, 0, false, -Infinity, Infinity);
+        squares[i] = null;
+        
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = i;
+        }
+      }
     }
-
-    // Take any available side
-    const availableSides = [1, 3, 5, 7].filter(side => squares[side] === null);
-    if (availableSides.length > 0) {
-      return availableSides[Math.floor(Math.random() * availableSides.length)];
-    }
-
-    // No moves available
-    return -1;
+    
+    return bestMove;
   };
 
   const findWinningMove = (squares, player) => {
@@ -109,10 +163,14 @@ const Computer = () => {
     const bestMove = findBestMove(newState);
     
     if (bestMove !== -1) {
-      newState[bestMove] = 'O';
+      newState[bestMove] = computerSymbol;
       
-      // Play sound for computer's move
-      playOSound();
+      // Play sound based on symbol
+      if (computerSymbol === 'X') {
+        playXSound();
+      } else {
+        playOSound();
+      }
       
       setState(newState);
     }
@@ -136,18 +194,22 @@ const Computer = () => {
       playDrawSound(); // Play draw sound
     }
     
-    // Make computer move
+    // Make computer move if it's computer's turn
     if (!isXNext && !calculateWinner(state) && !isDraw(state)) {
       const timer = setTimeout(() => {
         computerMove();
       }, 500); // Delay for computer move
       return () => clearTimeout(timer);
     }
+    
+    // If computer is X and it's first move, make the move
+    if (isXNext && computerSymbol === 'X' && state.every(s => s === null)) {
+      const timer = setTimeout(() => {
+        computerMove();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
   }, [isXNext, state]);
-
-  const isDraw = (squares) => {
-    return squares.every((square) => square !== null);
-  };
 
   const resetGame = () => {
     setState(Array(9).fill(null));
@@ -155,11 +217,27 @@ const Computer = () => {
     setPlayerWins(0);
     setComputerWins(0);
     setDraws(0);
+    randomizeStartingPlayer();
   };
 
   const playAgain = () => {
     setState(Array(9).fill(null));
-    setIsXNext(true);
+    randomizeStartingPlayer();
+  };
+  
+  const randomizeStartingPlayer = () => {
+    // Randomly decide who goes first and who uses which symbol
+    const randomChoice = Math.random();
+    
+    if (randomChoice < 0.5) {
+      setPlayerSymbol('X');
+      setComputerSymbol('O');
+      setIsXNext(true); // Player goes first
+    } else {
+      setPlayerSymbol('O');
+      setComputerSymbol('X');
+      setIsXNext(true); // Computer will go first (handled in useEffect)
+    }
   };
 
   const winner = calculateWinner(state);
@@ -167,7 +245,7 @@ const Computer = () => {
     ? `Winner is ${winner}` 
     : isDraw(state) 
       ? 'It is a draw!' 
-      : `Turn of ${isXNext ? 'Player' : 'Computer'}`;
+      : `Turn of ${isXNext ? 'Player' : 'Computer'} (${isXNext ? playerSymbol : computerSymbol})`;
 
   return (
     <>
@@ -175,6 +253,9 @@ const Computer = () => {
       <div className='container'>
         <h1 className='title'>Tic Tac Toe</h1>
         <div className="status">{status}</div>
+        {/* <div className="player-info">
+          You are playing as: <strong>{playerSymbol}</strong>
+        </div> */}
         
         <div className="board">
           <div className="row1">
